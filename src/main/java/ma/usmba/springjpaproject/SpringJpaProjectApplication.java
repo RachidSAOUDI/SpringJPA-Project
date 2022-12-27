@@ -23,14 +23,16 @@ public class SpringJpaProjectApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         for (int i = 0; i < 100; i++) {
-            patientRepository.save(new Patient(null, "Hamid", new Date(), false, (int)(Math.random()*1000)));
+            patientRepository.save(new Patient(null, "Hamid", new Date(), Math.random()>0.5?true:false, (int)(Math.random()*1000)));
         }
         Page<Patient> patients = patientRepository.findAll(PageRequest.of(1,5));
         System.out.println("Total Pages : "+patients.getTotalPages());
         System.out.println("Total Elements : "+patients.getTotalElements());
         System.out.println("Numbers pages : "+patients.getNumber());
         List<Patient> content = patients.getContent();
-        content.forEach(p->{
+        Page<Patient> byMalade = patientRepository.findByMalade(true, PageRequest.of(0, 4));
+        List<Patient> patientList = patientRepository.chercherPatients("%h%", 40);
+        patientList.forEach(p->{
             System.out.println("=====================================");
             System.out.println(p.getId());
             System.out.println(p.getNom());
