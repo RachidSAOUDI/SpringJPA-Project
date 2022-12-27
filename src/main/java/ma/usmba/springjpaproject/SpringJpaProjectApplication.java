@@ -48,6 +48,6 @@ public class SpringJpaProjectApplication implements CommandLineRunner {
         }
         patient.setScore(670);
         patientRepository.save(patient);
-        patientRepository.deleteById(1L);
+        patientRepository.deleteById(2L);
     }
 }
