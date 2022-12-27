@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Date;
 import java.util.List;
@@ -20,11 +22,15 @@ public class SpringJpaProjectApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        patientRepository.save(new Patient(null, "Hamid", new Date(), false, 56));
-        patientRepository.save(new Patient(null, "Nabil", new Date(), true, 76));
-        patientRepository.save(new Patient(null, "Jamal", new Date(), false, 99));
-        List<Patient> patients = patientRepository.findAll();
-        patients.forEach(p->{
+        for (int i = 0; i < 100; i++) {
+            patientRepository.save(new Patient(null, "Hamid", new Date(), false, (int)(Math.random()*1000)));
+        }
+        Page<Patient> patients = patientRepository.findAll(PageRequest.of(1,5));
+        System.out.println("Total Pages : "+patients.getTotalPages());
+        System.out.println("Total Elements : "+patients.getTotalElements());
+        System.out.println("Numbers pages : "+patients.getNumber());
+        List<Patient> content = patients.getContent();
+        content.forEach(p->{
             System.out.println("=====================================");
             System.out.println(p.getId());
             System.out.println(p.getNom());
